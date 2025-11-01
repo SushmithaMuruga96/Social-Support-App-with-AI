@@ -1,0 +1,33 @@
+{
+  "name": "socialsupportapp",
+  "version": "1.0.0",
+  "description": "This is an Social Support Application",
+  "scripts": {
+    "test": "Jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SushmithaMuruga96/Social-Support-App-with-AI.git"
+  },
+  "author": "Sushmitha Muruganantham",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SushmithaMuruga96/Social-Support-App-with-AI/issues"
+  },
+  "homepage": "https://github.com/SushmithaMuruga96/Social-Support-App-with-AI#readme",
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "parcel": "^2.16.0"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@fontsource/roboto": "^5.2.8",
+    "@mui/icons-material": "^7.3.4",
+    "@mui/material": "^7.3.4",
+    "axios": "^1.13.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-hook-form": "^7.65.0"
+  }
+}
