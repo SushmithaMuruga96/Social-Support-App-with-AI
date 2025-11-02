@@ -27,9 +27,11 @@
     "@mui/material": "^7.3.4",
     "@reduxjs/toolkit": "^2.9.2",
     "axios": "^1.13.1",
+    "i18next": "^25.6.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.65.0",
+    "react-i18next": "^16.2.3",
     "react-redux": "^9.2.0",
     "redux": "^5.0.1"
   }

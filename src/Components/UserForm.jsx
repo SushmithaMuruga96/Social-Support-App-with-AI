@@ -1,14 +1,49 @@
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import "./form.css";
+import "../ReusableComponents/form.css";
 import { Grid, Button } from "@mui/material";
-import OpenAIConnect from "./openAIConnect";
+import OpenAIConnect from "../ReusableComponents/OpenAIConnect";
+import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
-const UserForm = ({ activeStep }) => {
-  const { register, handleSubmit } = useForm();
+const UserForm = ({ activeStep, onFormSubmit }) => {
+  const { t } = useTranslation();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isValid },
+  } = useForm({ mode: "onChange" });
+  const { finResponse, empResponse, reasonForApply } = useSelector(
+    (state) => state.gpt
+  );
+
+  useEffect(() => {
+    if (finResponse) {
+      setValue("financialSituation", finResponse, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    }
+    if (empResponse) {
+      setValue("employmentCircumstances", empResponse, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    }
+    if (reasonForApply) {
+      setValue("reasonForApplying", reasonForApply, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    }
+  }, [finResponse, empResponse, reasonForApply, setValue]);
+
   const onSubmit = (data) => {
     console.log(data);
     const JsonData = JSON.stringify(data);
     localStorage.setItem("formData", JsonData);
+    onFormSubmit?.();
   };
 
   // STEP 1: Personal Info
@@ -20,20 +55,28 @@ const UserForm = ({ activeStep }) => {
           id="name"
           type="text"
           placeholder="Enter your name"
-          {...register("name", { required: true })}
-          autoComplete="name"
+          {...register("name", {
+            required: "Full name is required",
+            minLength: { value: 3, message: "At least 3 characters required" },
+          })}
         />
+        {errors.name && <p className="error">{errors.name.message}</p>}
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
         <label htmlFor="nationId">National ID</label>
         <input
-          id="nationId"
+          id="nationalId"
           type="number"
           placeholder="Enter your national ID"
-          {...register("nationalId", { required: true, maxLength: 13 })}
-          autoComplete="tel"
+          {...register("nationalId", {
+            required: "National ID is required",
+            minLength: { value: 5, message: "Must be at least 5 digits" },
+          })}
         />
+        {errors.nationalId && (
+          <p className="error">{errors.nationalId.message}</p>
+        )}
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
@@ -41,9 +84,9 @@ const UserForm = ({ activeStep }) => {
         <input
           id="dob"
           type="date"
-          // autoComplete="bday"
           {...register("dob", { required: "Date of birth is required" })}
         />
+        {errors.dob && <p className="error">{errors.dob.message}</p>}
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
@@ -105,9 +148,15 @@ const UserForm = ({ activeStep }) => {
           id="phone"
           type="tel"
           placeholder="Enter your phone number"
-          {...register("phone", { required: "Phone number is required" })}
-          autoComplete="tel"
+          {...register("phone", {
+            required: "Phone number is required",
+            pattern: {
+              value: /^[0-9]{7,15}$/,
+              message: "Enter a valid phone number (7–15 digits)",
+            },
+          })}
         />
+        {errors.phone && <p className="error">{errors.phone.message}</p>}
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
@@ -116,9 +165,15 @@ const UserForm = ({ activeStep }) => {
           id="email"
           type="email"
           placeholder="Enter your email"
-          {...register("email", { required: "Email is required" })}
-          autoComplete="email"
+          {...register("email", {
+            required: "Email is required",
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: "Enter a valid email address",
+            },
+          })}
         />
+        {errors.email && <p className="error">{errors.email.message}</p>}
       </Grid>
     </Grid>
   );
@@ -145,12 +200,15 @@ const UserForm = ({ activeStep }) => {
         <input
           id="dependents"
           type="number"
-          autoComplete="off"
           placeholder="Number of dependents"
           {...register("dependents", {
-            required: "Number of dependents is required",
+            required: "Dependents count is required",
+            min: { value: 0, message: "Cannot be negative" },
           })}
         />
+        {errors.dependents && (
+          <p className="error">{errors.dependents.message}</p>
+        )}
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
@@ -172,56 +230,36 @@ const UserForm = ({ activeStep }) => {
         <input
           id="monthlyIncome"
           type="number"
-          autoComplete="off"
           placeholder="Monthly income"
           {...register("monthlyIncome", {
-            required: "Monthly income is required in AED",
+            required: "Monthly income is required",
+            min: { value: 0, message: "Must be a positive number" },
           })}
         />
+        {errors.monthlyIncome && (
+          <p className="error">{errors.monthlyIncome.message}</p>
+        )}
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label style={{ display: "block", marginBottom: "8px" }}>
-          Housing Status
-        </label>
-
-        <div style={{ display: "flex", gap: "20px", marginTop: "8px" }}>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <input
-              type="radio"
-              id="owned"
-              value="owned"
-              {...register("housingStatus", {
-                required: "Housing status is required",
-              })}
-            />
-            <label htmlFor="owned">Owned</label>
-          </div>
-
-          <div style={{ display: "flex" }}>
-            <input
-              type="radio"
-              id="rented"
-              value="rented"
-              {...register("housingStatus", {
-                required: "Housing status is required",
-              })}
-            />
-            <label htmlFor="rented">Rented</label>
-          </div>
-
-          <div style={{ display: "flex" }}>
-            <input
-              type="radio"
-              id="livingWithFamily"
-              value="livingWithFamily"
-              {...register("housingStatus", {
-                required: "Housing status is required",
-              })}
-            />
-            <label htmlFor="livingWithFamily">Living with Family</label>
-          </div>
+        <label>Housing Status</label>
+        <div style={{ display: "flex", gap: "20px" }}>
+          {["owned", "rented", "livingWithFamily"].map((option) => (
+            <label key={option}>
+              <input
+                type="radio"
+                value={option}
+                {...register("housingStatus", {
+                  required: "Please select your housing status",
+                })}
+              />
+              {option.replace(/([A-Z])/g, " $1")}
+            </label>
+          ))}
         </div>
+        {errors.housingStatus && (
+          <p className="error">{errors.housingStatus.message}</p>
+        )}
       </Grid>
     </Grid>
   );
@@ -236,10 +274,19 @@ const UserForm = ({ activeStep }) => {
         <textarea
           id="financialSituation"
           placeholder="Describe your current financial situation"
-          {...register("financialSituation", { required: true })}
+          {...register("financialSituation", {
+            required: "Financial situation is required",
+            minLength: {
+              value: 10,
+              message: "Please write at least 10 characters",
+            },
+          })}
           autoComplete="off"
           rows={5}
-        ></textarea>
+        />
+        {errors.financialSituation && (
+          <p className="error">{errors.financialSituation.message}</p>
+        )}
         {/* <Button
           variant="outlined"
           size="small"
@@ -251,6 +298,7 @@ const UserForm = ({ activeStep }) => {
           prompt={
             "I am unemployed with no income. Help me describe my financial hardship."
           }
+          id={"financialSituation"}
         />
       </Grid>
 
@@ -261,10 +309,19 @@ const UserForm = ({ activeStep }) => {
         <textarea
           id="employmentCircumstances"
           placeholder="Describe your employment circumstances"
-          {...register("employmentCircumstances", { required: true })}
+          {...register("employmentCircumstances", {
+            required: "Employment Circumstances is required",
+            minLength: {
+              value: 10,
+              message: "Please write at least 10 characters",
+            },
+          })}
           autoComplete="off"
           rows={5}
-        ></textarea>
+        />
+        {errors.employmentCircumstances && (
+          <p className="error">{errors.employmentCircumstances.message}</p>
+        )}
         {/* <Button
           variant="outlined"
           size="small"
@@ -276,6 +333,7 @@ const UserForm = ({ activeStep }) => {
           prompt={
             "I am unemployed with no income. Help me describe my financial hardship."
           }
+          id="employmentCircumstances"
         />
       </Grid>
 
@@ -284,10 +342,19 @@ const UserForm = ({ activeStep }) => {
         <textarea
           id="reasonForApplying"
           placeholder="Reason for applying"
-          {...register("reasonForApplying", { required: true })}
+          {...register("reasonForApplying", {
+            required: "Reason for applying is required",
+            minLength: {
+              value: 10,
+              message: "Please write at least 10 characters",
+            },
+          })}
           autoComplete="off"
           rows={5}
-        ></textarea>
+        />
+        {errors.reasonForApplying && (
+          <p className="error">{errors.reasonForApplying.message}</p>
+        )}
         {/* <Button
           variant="outlined"
           size="small"
@@ -299,6 +366,7 @@ const UserForm = ({ activeStep }) => {
           prompt={
             "I am unemployed with no income. Help me describe my financial hardship."
           }
+          id="reasonForApplying"
         />
       </Grid>
     </Grid>
@@ -313,11 +381,11 @@ const UserForm = ({ activeStep }) => {
       <Grid container justifyContent="center" marginTop={3}>
         <Button
           type="submit"
-          disabled={activeStep !== 2}
+          disabled={activeStep !== 2 && !isValid}
           variant="contained"
           color="primary"
         >
-          Submit
+          {t("Submit")}
         </Button>
       </Grid>
     </form>

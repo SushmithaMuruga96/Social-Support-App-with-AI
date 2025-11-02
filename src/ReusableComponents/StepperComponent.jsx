@@ -16,6 +16,7 @@ const steps = [
 export default function StepperComponent() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const [isStepSubmitted, setIsStepSubmitted] = React.useState(false);
 
   //   const isStepOptional = (step) => {
   //     return step === 1;
@@ -26,6 +27,7 @@ export default function StepperComponent() {
   };
 
   const handleNext = () => {
+    setIsStepSubmitted(false);
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -37,6 +39,7 @@ export default function StepperComponent() {
   };
 
   const handleBack = () => {
+    setIsStepSubmitted(false);
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
@@ -95,6 +98,11 @@ export default function StepperComponent() {
       ) : (
         <React.Fragment>
           {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
+          <UserForm
+            activeStep={activeStep}
+            onFormSubmit={() => setIsStepSubmitted(true)}
+          />
+
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               color="inherit"
@@ -110,11 +118,13 @@ export default function StepperComponent() {
                 Skip
               </Button>
             )} */}
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? "Finish" : "Next"}
+            <Button
+              onClick={handleNext}
+              disabled={!isStepSubmitted && activeStep === steps.length - 1}
+            >
+              {activeStep === steps.length - 1 ? "finish" : "Next"}
             </Button>
           </Box>
-          <UserForm activeStep={activeStep} />
         </React.Fragment>
       )}
     </Box>
