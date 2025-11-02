@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import "./form.css";
 import { Grid, Button } from "@mui/material";
-import GptHelperForm from "./GptHelperForm";
+import OpenAIConnect from "./openAIConnect";
 
-const UserHookForm = ({ activeStep }) => {
+const UserForm = ({ activeStep }) => {
   const { register, handleSubmit } = useForm();
   const onSubmit = (data) => {
     console.log(data);
@@ -247,7 +247,7 @@ const UserHookForm = ({ activeStep }) => {
         >
           Help me to write
         </Button> */}
-        <GptHelperForm
+        <OpenAIConnect
           prompt={
             "I am unemployed with no income. Help me describe my financial hardship."
           }
@@ -272,7 +272,7 @@ const UserHookForm = ({ activeStep }) => {
         >
           Help me to write
         </Button> */}
-        <GptHelperForm
+        <OpenAIConnect
           prompt={
             "I am unemployed with no income. Help me describe my financial hardship."
           }
@@ -295,7 +295,7 @@ const UserHookForm = ({ activeStep }) => {
         >
           Help me to write
         </Button> */}
-        <GptHelperForm
+        <OpenAIConnect
           prompt={
             "I am unemployed with no income. Help me describe my financial hardship."
           }
@@ -324,4 +324,4 @@ const UserHookForm = ({ activeStep }) => {
   );
 };
 
-export default UserHookForm;
+export default UserForm;

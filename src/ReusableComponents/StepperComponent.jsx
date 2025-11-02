@@ -5,7 +5,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import UserHookForm from "./UserHookForm";
+import UserForm from "../Components/UserForm";
 
 const steps = [
   "Personal Information",
@@ -95,7 +95,6 @@ export default function StepperComponent() {
       ) : (
         <React.Fragment>
           {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
-          <UserHookForm activeStep={activeStep} />
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               color="inherit"
@@ -115,6 +114,7 @@ export default function StepperComponent() {
               {activeStep === steps.length - 1 ? "Finish" : "Next"}
             </Button>
           </Box>
+          <UserForm activeStep={activeStep} />
         </React.Fragment>
       )}
     </Box>

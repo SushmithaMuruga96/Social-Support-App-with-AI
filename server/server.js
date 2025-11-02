@@ -29,9 +29,11 @@ app.post("/api/chat", async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
-    console.error("Error calling OpenAI API:", error);
-    res.status(500).send("Error communicating with OpenAI API");
+    console.error("OpenAI error:", error.response?.data || error.message);
+    res.status(error.response?.status || 500).json({
+      error: error.response?.data || "Something went wrong",
+    });
   }
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+app.listen(5000, () => console.log("✅ Server running on port 5000"));
