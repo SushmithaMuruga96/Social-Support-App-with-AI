@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import "../ReusableComponents/form.css";
+import "../../ReusableComponents/form.css";
 import { Grid, Button, CircularProgress } from "@mui/material";
-import OpenAIConnect from "../../ReusableComponents/OpenAIConnect";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import StepPersonalInfo from "./StepPersonalInfo";

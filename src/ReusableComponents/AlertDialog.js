@@ -38,6 +38,8 @@ const AlertDialogSlide = ({ content = "", modelopen = false, id = "" }) => {
         keepMounted
         onClose={() => handleClose("discard")}
         aria-describedby={`alert-dialog-slide-description-${id}`}
+        fullWidth
+        maxWidth="md" // increase max width: 'sm' | 'md' | 'lg'
       >
         <DialogTitle>{t("openAiSuggestion")}</DialogTitle>
 
