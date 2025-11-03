@@ -5,14 +5,14 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import UserForm from "../Components/UserForm";
+import UserForm from "../Components/Forms/UserForm";
 import { useTranslation } from "react-i18next";
 import { useTheme, useMediaQuery } from "@mui/material";
 
 export default function StepperComponent() {
   const { t } = useTranslation();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // true for <600px screens
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [isStepSubmitted, setIsStepSubmitted] = React.useState(false);
@@ -89,6 +89,7 @@ export default function StepperComponent() {
         </React.Fragment>
       ) : (
         <React.Fragment>
+          {/* calling form */}
           <UserForm
             activeStep={activeStep}
             onFormSubmit={() => setIsStepSubmitted(true)}
