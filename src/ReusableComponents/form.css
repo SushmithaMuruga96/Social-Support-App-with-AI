@@ -151,3 +151,17 @@ input[type="radio"] {
     width: 100%;
   }
 }
+
+/* Base style for all inputs */
+input[type="date"] {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #333;
+  font-size: 16px;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  cursor: pointer;
+}
