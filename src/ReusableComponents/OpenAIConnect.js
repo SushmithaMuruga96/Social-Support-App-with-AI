@@ -13,15 +13,38 @@ import {
 } from "../Redux/gptSlice";
 import { useTranslation } from "react-i18next";
 
-const mockResponse = {
-  choices: [
-    {
-      message: {
-        content:
-          "I am currently unemployed and have no regular source of income. This situation has made it extremely difficult to cover my daily expenses, including rent, food, and basic necessities. Despite actively searching for work, I have not yet been able to secure a stable position. Any financial support or assistance during this challenging time would greatly help me manage my essential needs and regain financial stability.",
+// mock responses for different fields
+const mockResponses = {
+  financialSituation: {
+    choices: [
+      {
+        message: {
+          content:
+            "I am currently unemployed and have no stable source of income. This has made it challenging to meet my daily expenses such as rent, food, and basic needs. I am actively seeking employment opportunities to improve my financial condition.",
+        },
       },
-    },
-  ],
+    ],
+  },
+  employmentCircumstances: {
+    choices: [
+      {
+        message: {
+          content:
+            "I recently lost my job and have been struggling to find new employment. Despite submitting applications to several companies, I have not yet received any offers. I remain hopeful and continue my job search actively.",
+        },
+      },
+    ],
+  },
+  reasonForApplying: {
+    choices: [
+      {
+        message: {
+          content:
+            "I am applying for assistance to help cover my basic living costs during this difficult time. Financial aid will allow me to manage essential needs such as food, rent, and transportation until I can secure stable employment.",
+        },
+      },
+    ],
+  },
 };
 
 const OpenAIConnect = ({ prompt, id = "" }) => {
@@ -41,24 +64,24 @@ const OpenAIConnect = ({ prompt, id = "" }) => {
     setResponse("");
     try {
       const res = await axios.post("http://localhost:5000/api/chat", {
-        prompt:
-          "I am unemployed with no income. Help me describe my financial hardship.",
+        prompt,
       });
-
       const data = res.data;
-      console.log(data.choices[0].message.content);
       setResponse(data.choices[0].message.content);
     } catch (error) {
       // console.error("Error calling OpenAI", error);
-      setResponse("Something went wrong");
+      // Fallback mock response based on id
+      if (mockResponses[id]) {
+        setResponse(mockResponses[id].choices[0].message.content);
+      } else {
+        setResponse("Something went wrong. Please try again.");
+      }
     } finally {
       setLoading(false);
-      setResponse(mockResponse.choices[0].message.content);
     }
   };
 
   useEffect(() => {
-    // console.log(dialogState, id, "dialogState");
     if (dialogState?.status === "accept" && activeField === id) {
       if (id === "financialSituation") {
         dispatch(setFinResponse(dialogState?.content || response));
@@ -76,13 +99,9 @@ const OpenAIConnect = ({ prompt, id = "" }) => {
         dispatch(setEmpResponse(""));
       } else if (id === "reasonForApplying") {
         dispatch(setReasonForApply(""));
-      } else {
-        //do nothing
       }
     }
 
-    // dispatch(setActiveField(null));
-    // ✅ Reset AFTER the effect has applied logic
     if (dialogState?.status === "accept" || dialogState?.status === "discard") {
       const timer = setTimeout(() => {
         dispatch(setDialogState(""));
@@ -90,6 +109,7 @@ const OpenAIConnect = ({ prompt, id = "" }) => {
       return () => clearTimeout(timer);
     }
   }, [dialogState, id, activeField, response, dispatch]);
+
   return (
     <div style={{ padding: "20px" }}>
       <Button
@@ -100,11 +120,8 @@ const OpenAIConnect = ({ prompt, id = "" }) => {
       >
         {loading ? t("Generating...") : t("Help me to write")}
       </Button>
+
       {response && (
-        // <div style={{ marginTop: "20px", whiteSpace: "pre-wrap" }}>
-        //   <strong>ChatGPT Response:</strong>
-        //   <p>{response}</p>
-        // </div>
         <AlertDialogSlide content={response} modelopen={true} id={id} />
       )}
     </div>

@@ -9,6 +9,8 @@ import "./src/i18n.js";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <Home />
+    <div style={{ width: "100%", maxWidth: "100%" }}>
+      <Home />
+    </div>
   </Provider>
 );

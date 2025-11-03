@@ -7,9 +7,12 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import UserForm from "../Components/UserForm";
 import { useTranslation } from "react-i18next";
+import { useTheme, useMediaQuery } from "@mui/material";
 
 export default function StepperComponent() {
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // true for <600px screens
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [isStepSubmitted, setIsStepSubmitted] = React.useState(false);
@@ -44,7 +47,21 @@ export default function StepperComponent() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Stepper activeStep={activeStep}>
+      <Stepper
+        activeStep={activeStep}
+        alternativeLabel={!isMobile} // horizontal for desktop
+        orientation={isMobile ? "vertical" : "horizontal"} // vertical for mobile
+        sx={{
+          width: "100%",
+          maxWidth: isMobile ? "100%" : "600px",
+          bgcolor: "transparent",
+          "& .MuiStepLabel-label": {
+            color: "#fff",
+            textAlign: "center",
+          },
+          margin: "0 auto",
+        }}
+      >
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};

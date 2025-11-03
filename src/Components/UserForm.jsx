@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import "../ReusableComponents/form.css";
-import { Grid, Button } from "@mui/material";
+import { Grid, Button, CircularProgress } from "@mui/material";
 import OpenAIConnect from "../ReusableComponents/OpenAIConnect";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -17,6 +17,9 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
   const { finResponse, empResponse, reasonForApply } = useSelector(
     (state) => state.gpt
   );
+
+  const [loading, setLoading] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState("");
 
   useEffect(() => {
     if (finResponse) {
@@ -39,16 +42,54 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
     }
   }, [finResponse, empResponse, reasonForApply, setValue]);
 
-  const onSubmit = (data) => {
-    console.log(data);
-    const JsonData = JSON.stringify(data);
-    localStorage.setItem("formData", JsonData);
-    onFormSubmit?.();
+  const mockApiCall = (data) => {
+    return new Promise((resolve, reject) => {
+      // Simulate 2-second API delay
+      setTimeout(() => {
+        if (data.name && data.nationalId) {
+          resolve({
+            status: 200,
+            message: "Form submitted successfully!",
+            data,
+          });
+        } else {
+          reject({
+            status: 400,
+            message: "Invalid form data.",
+          });
+        }
+      }, 2000);
+    });
+  };
+
+  const onSubmit = async (data) => {
+    console.log("Form Data:", data);
+    setLoading(true);
+    setSubmitMessage("");
+
+    try {
+      localStorage.setItem("formData", JSON.stringify(data));
+      const response = await mockApiCall(data);
+
+      if (response.status === 200) {
+        setSubmitMessage(t("Form submitted successfully!"));
+        onFormSubmit?.(); // move to next step or success screen
+      }
+    } catch (error) {
+      setSubmitMessage(t("Something went wrong. Please try again."));
+    } finally {
+      setLoading(false);
+    }
   };
 
   // STEP 1: Personal Info
   const personalInfoForm = () => (
-    <Grid container columnSpacing={5} rowSpacing={0.5} sx={{ width: "100%" }}>
+    <Grid
+      container
+      columnSpacing={5}
+      rowSpacing={0.5}
+      sx={{ width: "100%", margin: 0 }}
+    >
       <Grid size={{ xs: 12, sm: 6 }}>
         <label htmlFor="name">{t("Full Name")}</label>
         <input
@@ -183,7 +224,12 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
 
   // STEP 2: Family & Financial Info
   const familyFinancialForm = () => (
-    <Grid container columnSpacing={5} rowSpacing={0.5}>
+    <Grid
+      container
+      columnSpacing={5}
+      rowSpacing={0.5}
+      sx={{ width: "100%", margin: 0 }}
+    >
       <Grid size={{ xs: 12, sm: 6 }}>
         <label htmlFor="maritalStatus">{t("Marital Status")}</label>
         <select id="maritalStatus" {...register("maritalStatus")}>
@@ -261,7 +307,12 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
 
   // STEP 3: Situation Description
   const situationDescriptionForm = () => (
-    <Grid container columnSpacing={5} rowSpacing={0.5}>
+    <Grid
+      container
+      columnSpacing={5}
+      rowSpacing={0.5}
+      sx={{ width: "100%", margin: 0 }}
+    >
       <Grid size={{ xs: 12 }}>
         <label htmlFor="financialSituation">
           {t("Describe Your Current Financial Situation")}
@@ -283,9 +334,9 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
         )}
         <OpenAIConnect
           prompt={t(
-            "I am unemployed with no income. Help me describe my financial hardship."
+            "I am unemployed with no income. Help me describe my financial hardship in detail, including my monthly expenses, debts, and lack of resources."
           )}
-          id={"financialSituation"}
+          id="financialSituation"
         />
       </Grid>
 
@@ -310,7 +361,7 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
         )}
         <OpenAIConnect
           prompt={t(
-            "I am unemployed with no income. Help me describe my financial hardship."
+            "Describe my employment circumstances, including my previous job, reason for unemployment, and efforts to find new work."
           )}
           id="employmentCircumstances"
         />
@@ -335,7 +386,7 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
         )}
         <OpenAIConnect
           prompt={t(
-            "I am unemployed with no income. Help me describe my financial hardship."
+            "Help me explain why I am applying for government social support and how this assistance would improve my living situation."
           )}
           id="reasonForApplying"
         />
@@ -349,16 +400,38 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
       {activeStep === 1 && familyFinancialForm()}
       {activeStep === 2 && situationDescriptionForm()}
 
-      <Grid container justifyContent="center" marginTop={3}>
-        <Button
-          type="submit"
-          disabled={activeStep !== 2 && !isValid}
-          variant="contained"
-          color="primary"
-        >
-          {t("Submit")}
-        </Button>
-      </Grid>
+      {isValid && (
+        <>
+          <Grid container justifyContent="center" marginTop={3}>
+            <Button
+              type="submit"
+              disabled={activeStep !== 2 && submitMessage === ""}
+              variant="contained"
+              color="primary"
+            >
+              {loading ? (
+                <>
+                  <CircularProgress size={20} sx={{ mr: 1 }} />
+                  {t("Submitting...")}
+                </>
+              ) : (
+                t("Submit")
+              )}
+            </Button>
+          </Grid>
+          {submitMessage && (
+            <p
+              style={{
+                textAlign: "center",
+                marginTop: "10px",
+                color: submitMessage.includes("successfully") ? "green" : "red",
+              }}
+            >
+              {submitMessage}
+            </p>
+          )}
+        </>
+      )}
     </form>
   );
 };
