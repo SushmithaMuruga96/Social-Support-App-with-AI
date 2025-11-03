@@ -11,6 +11,7 @@ import {
   setActiveField,
   setDialogState,
 } from "../Redux/gptSlice";
+import { useTranslation } from "react-i18next";
 
 const mockResponse = {
   choices: [
@@ -24,6 +25,7 @@ const mockResponse = {
 };
 
 const OpenAIConnect = ({ prompt, id = "" }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { dialogState, activeField } = useSelector((state) => state.gpt);
   const [loading, setLoading] = useState(false);
@@ -96,7 +98,7 @@ const OpenAIConnect = ({ prompt, id = "" }) => {
         onClick={onhandleClick}
         disabled={loading}
       >
-        {loading ? "Generating..." : "Help me to write"}
+        {loading ? t("Generating...") : t("Help me to write")}
       </Button>
       {response && (
         // <div style={{ marginTop: "20px", whiteSpace: "pre-wrap" }}>

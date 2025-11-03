@@ -9,12 +9,14 @@ import Slide from "@mui/material/Slide";
 import TextField from "@mui/material/TextField";
 import { useDispatch } from "react-redux";
 import { setDialogState } from "../Redux/gptSlice";
+import { useTranslation } from "react-i18next";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const AlertDialogSlide = ({ content = "", modelopen = false, id = "" }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(modelopen);
   const [isEditing, setIsEditing] = React.useState(false);
@@ -37,7 +39,7 @@ const AlertDialogSlide = ({ content = "", modelopen = false, id = "" }) => {
         onClose={() => handleClose("discard")}
         aria-describedby={`alert-dialog-slide-description-${id}`}
       >
-        <DialogTitle>Open AI Suggestion</DialogTitle>
+        <DialogTitle>{t("openAiSuggestion")}</DialogTitle>
 
         <DialogContent>
           {isEditing ? (
@@ -65,7 +67,7 @@ const AlertDialogSlide = ({ content = "", modelopen = false, id = "" }) => {
                   handleClose("accept");
                 }}
               >
-                Save
+                {t("save")}
               </Button>
               <Button
                 onClick={() => {
@@ -73,7 +75,7 @@ const AlertDialogSlide = ({ content = "", modelopen = false, id = "" }) => {
                   handleClose("discard");
                 }}
               >
-                Cancel
+                {t("cancel")}
               </Button>
             </>
           ) : (
@@ -83,21 +85,21 @@ const AlertDialogSlide = ({ content = "", modelopen = false, id = "" }) => {
                   handleClose("accept");
                 }}
               >
-                Accept
+                {t("accept")}
               </Button>
               <Button
                 onClick={() => {
                   setIsEditing(true);
                 }}
               >
-                Edit
+                {t("edit")}
               </Button>
               <Button
                 onClick={() => {
                   handleClose("discard");
                 }}
               >
-                Discard
+                {t("discard")}
               </Button>
             </>
           )}

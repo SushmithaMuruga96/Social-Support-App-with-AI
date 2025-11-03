@@ -50,28 +50,31 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
   const personalInfoForm = () => (
     <Grid container columnSpacing={5} rowSpacing={0.5} sx={{ width: "100%" }}>
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label htmlFor="name">Full Name</label>
+        <label htmlFor="name">{t("Full Name")}</label>
         <input
           id="name"
           type="text"
-          placeholder="Enter your name"
+          placeholder={t("Enter your name")}
           {...register("name", {
-            required: "Full name is required",
-            minLength: { value: 3, message: "At least 3 characters required" },
+            required: t("Full name is required"),
+            minLength: {
+              value: 3,
+              message: t("At least 3 characters required"),
+            },
           })}
         />
         {errors.name && <p className="error">{errors.name.message}</p>}
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label htmlFor="nationId">National ID</label>
+        <label htmlFor="nationId">{t("National ID")}</label>
         <input
           id="nationalId"
           type="number"
-          placeholder="Enter your national ID"
+          placeholder={t("Enter your national ID")}
           {...register("nationalId", {
-            required: "National ID is required",
-            minLength: { value: 5, message: "Must be at least 5 digits" },
+            required: t("National ID is required"),
+            minLength: { value: 5, message: t("Must be at least 5 digits") },
           })}
         />
         {errors.nationalId && (
@@ -80,79 +83,79 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label htmlFor="dob">Date of Birth</label>
+        <label htmlFor="dob">{t("Date of Birth")}</label>
         <input
           id="dob"
           type="date"
-          {...register("dob", { required: "Date of birth is required" })}
+          {...register("dob", { required: t("Date of birth is required") })}
         />
         {errors.dob && <p className="error">{errors.dob.message}</p>}
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label htmlFor="gender">Gender</label>
+        <label htmlFor="gender">{t("Gender")}</label>
         <select id="gender" {...register("gender")}>
-          <option value="female">Female</option>
-          <option value="male">Male</option>
-          <option value="other">Other</option>
+          <option value="female">{t("Female")}</option>
+          <option value="male">{t("Male")}</option>
+          <option value="other">{t("Other")}</option>
         </select>
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label htmlFor="address">Address</label>
+        <label htmlFor="address">{t("Address")}</label>
         <input
           id="address"
           type="text"
           autoComplete="street-address"
-          placeholder="Enter your address"
-          {...register("address", { required: "Address is required" })}
+          placeholder={t("Enter your address")}
+          {...register("address", { required: t("Address is required") })}
         />
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label htmlFor="city">City</label>
+        <label htmlFor="city">{t("City")}</label>
         <input
           id="city"
           type="text"
-          placeholder="Enter your city"
-          {...register("city", { required: "City is required" })}
+          placeholder={t("Enter your city")}
+          {...register("city", { required: t("City is required") })}
           autoComplete="address-level2"
         />
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label htmlFor="state">State</label>
+        <label htmlFor="state">{t("State")}</label>
         <input
           id="state"
           type="text"
-          placeholder="Enter your state"
-          {...register("state", { required: "State is required" })}
+          placeholder={t("Enter your state")}
+          {...register("state", { required: t("State is required") })}
           autoComplete="address-level1"
         />
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label htmlFor="country">Country</label>
+        <label htmlFor="country">{t("Country")}</label>
         <input
           id="country"
           type="text"
-          placeholder="Enter your country"
-          {...register("country", { required: "Country is required" })}
+          placeholder={t("Enter your country")}
+          {...register("country", { required: t("Country is required") })}
           autoComplete="country-name"
         />
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label htmlFor="phone">Phone</label>
+        <label htmlFor="phone">{t("Phone")}</label>
         <input
           id="phone"
           type="tel"
-          placeholder="Enter your phone number"
+          placeholder={t("Enter your phone number")}
           {...register("phone", {
-            required: "Phone number is required",
+            required: t("Phone number is required"),
             pattern: {
               value: /^[0-9]{7,15}$/,
-              message: "Enter a valid phone number (7–15 digits)",
+              message: t("Enter a valid phone number (7–15 digits)"),
             },
           })}
         />
@@ -160,16 +163,16 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">{t("Email")}</label>
         <input
           id="email"
           type="email"
-          placeholder="Enter your email"
+          placeholder={t("Enter your email")}
           {...register("email", {
-            required: "Email is required",
+            required: t("Email is required"),
             pattern: {
               value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: "Enter a valid email address",
+              message: t("Enter a valid email address"),
             },
           })}
         />
@@ -182,28 +185,24 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
   const familyFinancialForm = () => (
     <Grid container columnSpacing={5} rowSpacing={0.5}>
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label htmlFor="maritalStatus">Marital Status</label>
-        <select
-          id="maritalStatus"
-          autoComplete="off"
-          {...register("maritalStatus")}
-        >
-          <option value="single">Single</option>
-          <option value="married">Married</option>
-          <option value="divorced">Divorced</option>
-          <option value="widowed">Widowed</option>
+        <label htmlFor="maritalStatus">{t("Marital Status")}</label>
+        <select id="maritalStatus" {...register("maritalStatus")}>
+          <option value="single">{t("Single")}</option>
+          <option value="married">{t("Married")}</option>
+          <option value="divorced">{t("Divorced")}</option>
+          <option value="widowed">{t("Widowed")}</option>
         </select>
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label htmlFor="dependents">Number of Dependents</label>
+        <label htmlFor="dependents">{t("Number of Dependents")}</label>
         <input
           id="dependents"
           type="number"
-          placeholder="Number of dependents"
+          placeholder={t("Number of dependents")}
           {...register("dependents", {
-            required: "Dependents count is required",
-            min: { value: 0, message: "Cannot be negative" },
+            required: t("Dependents count is required"),
+            min: { value: 0, message: t("Cannot be negative") },
           })}
         />
         {errors.dependents && (
@@ -212,28 +211,24 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label htmlFor="employmentStatus">Employment Status</label>
-        <select
-          id="employmentStatus"
-          autoComplete="off"
-          {...register("employmentStatus")}
-        >
-          <option value="employed">Employed</option>
-          <option value="unemployed">Unemployed</option>
-          <option value="student">Student</option>
-          <option value="retired">Retired</option>
+        <label htmlFor="employmentStatus">{t("Employment Status")}</label>
+        <select id="employmentStatus" {...register("employmentStatus")}>
+          <option value="employed">{t("Employed")}</option>
+          <option value="unemployed">{t("Unemployed")}</option>
+          <option value="student">{t("Student")}</option>
+          <option value="retired">{t("Retired")}</option>
         </select>
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label htmlFor="monthlyIncome">Monthly Income (in AED)</label>
+        <label htmlFor="monthlyIncome">{t("Monthly Income (in AED)")}</label>
         <input
           id="monthlyIncome"
           type="number"
-          placeholder="Monthly income"
+          placeholder={t("Monthly income")}
           {...register("monthlyIncome", {
-            required: "Monthly income is required",
-            min: { value: 0, message: "Must be a positive number" },
+            required: t("Monthly income is required"),
+            min: { value: 0, message: t("Must be a positive number") },
           })}
         />
         {errors.monthlyIncome && (
@@ -242,7 +237,7 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <label>Housing Status</label>
+        <label>{t("Housing Status")}</label>
         <div style={{ display: "flex", gap: "20px" }}>
           {["owned", "rented", "livingWithFamily"].map((option) => (
             <label key={option}>
@@ -250,10 +245,10 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
                 type="radio"
                 value={option}
                 {...register("housingStatus", {
-                  required: "Please select your housing status",
+                  required: t("Please select your housing status"),
                 })}
               />
-              {option.replace(/([A-Z])/g, " $1")}
+              {t(option.replace(/([A-Z])/g, " $1"))}
             </label>
           ))}
         </div>
@@ -267,105 +262,81 @@ const UserForm = ({ activeStep, onFormSubmit }) => {
   // STEP 3: Situation Description
   const situationDescriptionForm = () => (
     <Grid container columnSpacing={5} rowSpacing={0.5}>
-      <Grid size={{ xs: 12, sm: 12 }}>
+      <Grid size={{ xs: 12 }}>
         <label htmlFor="financialSituation">
-          Describe Your Current Financial Situation
+          {t("Describe Your Current Financial Situation")}
         </label>
         <textarea
           id="financialSituation"
-          placeholder="Describe your current financial situation"
+          placeholder={t("Describe your current financial situation")}
           {...register("financialSituation", {
-            required: "Financial situation is required",
+            required: t("Financial situation is required"),
             minLength: {
               value: 10,
-              message: "Please write at least 10 characters",
+              message: t("Please write at least 10 characters"),
             },
           })}
-          autoComplete="off"
           rows={5}
         />
         {errors.financialSituation && (
           <p className="error">{errors.financialSituation.message}</p>
         )}
-        {/* <Button
-          variant="outlined"
-          size="small"
-          onClick={() => alert("Help is on the way!")}
-        >
-          Help me to write
-        </Button> */}
         <OpenAIConnect
-          prompt={
+          prompt={t(
             "I am unemployed with no income. Help me describe my financial hardship."
-          }
+          )}
           id={"financialSituation"}
         />
       </Grid>
 
-      <Grid size={{ xs: 12, sm: 12 }}>
+      <Grid size={{ xs: 12 }}>
         <label htmlFor="employmentCircumstances">
-          Describe Your Employment Circumstances
+          {t("Describe Your Employment Circumstances")}
         </label>
         <textarea
           id="employmentCircumstances"
-          placeholder="Describe your employment circumstances"
+          placeholder={t("Describe your employment circumstances")}
           {...register("employmentCircumstances", {
-            required: "Employment Circumstances is required",
+            required: t("Employment Circumstances is required"),
             minLength: {
               value: 10,
-              message: "Please write at least 10 characters",
+              message: t("Please write at least 10 characters"),
             },
           })}
-          autoComplete="off"
           rows={5}
         />
         {errors.employmentCircumstances && (
           <p className="error">{errors.employmentCircumstances.message}</p>
         )}
-        {/* <Button
-          variant="outlined"
-          size="small"
-          onClick={() => alert("Help is on the way!")}
-        >
-          Help me to write
-        </Button> */}
         <OpenAIConnect
-          prompt={
+          prompt={t(
             "I am unemployed with no income. Help me describe my financial hardship."
-          }
+          )}
           id="employmentCircumstances"
         />
       </Grid>
 
-      <Grid size={{ xs: 12, sm: 12 }}>
-        <label htmlFor="reasonForApplying">Reason for Applying</label>
+      <Grid size={{ xs: 12 }}>
+        <label htmlFor="reasonForApplying">{t("Reason for Applying")}</label>
         <textarea
           id="reasonForApplying"
-          placeholder="Reason for applying"
+          placeholder={t("Reason for applying")}
           {...register("reasonForApplying", {
-            required: "Reason for applying is required",
+            required: t("Reason for applying is required"),
             minLength: {
               value: 10,
-              message: "Please write at least 10 characters",
+              message: t("Please write at least 10 characters"),
             },
           })}
-          autoComplete="off"
           rows={5}
         />
         {errors.reasonForApplying && (
           <p className="error">{errors.reasonForApplying.message}</p>
         )}
-        {/* <Button
-          variant="outlined"
-          size="small"
-          onClick={() => alert("Help is on the way!")}
-        >
-          Help me to write
-        </Button> */}
         <OpenAIConnect
-          prompt={
+          prompt={t(
             "I am unemployed with no income. Help me describe my financial hardship."
-          }
+          )}
           id="reasonForApplying"
         />
       </Grid>

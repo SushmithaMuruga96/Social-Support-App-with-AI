@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "This is an Social Support Application",
   "scripts": {
-    "test": "Jest"
+    "test": "Jest",
+    "i18n:extract": "i18next 'src/**/*.{js,jsx,ts,tsx}' --config i18next-parser.config.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,8 @@
   "homepage": "https://github.com/SushmithaMuruga96/Social-Support-App-with-AI#readme",
   "devDependencies": {
     "buffer": "^6.0.3",
+    "i18next-parser": "^9.3.0",
+    "i18next-scanner": "^4.6.0",
     "parcel": "^2.16.0"
   },
   "dependencies": {

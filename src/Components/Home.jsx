@@ -1,6 +1,5 @@
 import React from "react";
 import StepperComponent from "../ReusableComponents/StepperComponent";
-import "../i18n";
 import { useTranslation } from "react-i18next";
 import { Button } from "@mui/material";
 
@@ -41,8 +40,9 @@ export default function Home() {
 
       <h1>{t("Welcome to the Social Support Application")}</h1>
       <h3>
-        This is government social support portal, designed to help citizens to
-        apply for financial assistance easily, quickly, and with smart help.
+        {t(
+          "This is government social support portal, designed to help citizens to apply for financial assistance easily, quickly, and with smart help."
+        )}
       </h3>
       <div
         style={{
